@@ -1,0 +1,57 @@
+.create-entry-container {
+    margin: 2rem auto;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-family: 'Arial', sans-serif;
+  }
+  .note {
+    font-size: 0.9rem;
+    color: #888;
+    font-style: italic;
+}
+
+  .create-entry-container fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .create-entry-container label {
+    font-weight: bold;
+  }
+  
+  .create-entry-container input[type="text"],
+  .create-entry-container input[type="number"] {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .create-entry-container button {
+    padding: 0.7rem 1rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .error-message,
+  .success-message {
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+  }
+  
+  .error-message {
+    background-color: #dc3545;
+  }
+  
+  .success-message {
+    background-color: #28a745;
+  }
+  

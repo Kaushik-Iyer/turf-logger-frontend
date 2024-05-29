@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import FootballPitch from './FootballPitch';
+import '../assets/css/CreateEntry.css'
 
 function CreateEntry() {
-    const [player, setPlayer] = useState({ name: '', goals: 0, assists: 0 });
+    const [player, setPlayer] = useState({ position: '', goals: 0, assists: 0 });
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState(''); // Add this line
     const [response, setResponse] = useState(null);
@@ -64,7 +65,6 @@ function CreateEntry() {
                 return response.json();
             })
             .then(data => {
-                console.log('Response from /players/day/month/goals/assists/:', data);
                 setResponse(data);
                 // Render the response here
 
@@ -75,30 +75,53 @@ function CreateEntry() {
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <label>
-                    Name:
-                    <input type="text" name="name" value={player.name} onChange={handleChange} style={{ padding: '5px' }} />
-                </label>
-                <label>
-                    Goals:
-                    <input type="number" name="goals" value={player.goals} onChange={handleChange} style={{ padding: '5px' }} />
-                </label>
-                <label>
-                    Assists:
-                    <input type="number" name="assists" value={player.assists} onChange={handleChange} style={{ padding: '5px' }} />
-                </label>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                <button type="submit" style={{ padding: '10px', backgroundColor: '#007BFF', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', width: 'fit-content' }}>Create Entry</button>
-            </form>
-            {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-            {response && (
-                <p>
-                    On this day, {response.player} also scored the same goals and assists in the match between {response.home_team} and {response.away_team} ({response.date}).
-                </p>
-            )}
+        <div className="create-entry-container">
+        <h3>Create Entry </h3>
+        <p className="note">Please note: You can only add one entry per day. If you add more than one, the latest entry will replace the previous one for that day.</p>
+        <form onSubmit={handleSubmit}>
+            <fieldset>
+            <label htmlFor="position">Position:</label>
+            <select
+                id="position"
+                name="position"
+                value={player.position}
+                onChange={handleChange}
+            >
+                <option value="Goalkeeper">Goalkeeper</option>
+                <option value="Defender">Defender</option>
+                <option value="Midfielder">Midfielder</option>
+                <option value="Forward">Forward</option>
+            </select>
+
+            <label htmlFor="goals">Goals:</label>
+            <input
+                type="number"
+                id="goals"
+                name="goals"
+                value={player.goals}
+                onChange={handleChange}
+            />
+
+            <label htmlFor="assists">Assists:</label>
+            <input
+                type="number"
+                id="assists"
+                name="assists"
+                value={player.assists}
+                onChange={handleChange}
+            />
+            </fieldset>
+            {error && <p className="error-message">{error}</p>}
+            <button type="submit">Create Entry</button>
+        </form>
+        {successMessage && <p className="success-message">{successMessage}</p>}
+        {/* {response && (
+            <p>
+            On this day, {response.player} also scored the same goals and assists in the match between {response.home_team} and {response.away_team} ({response.date}).
+            </p>
+        )} */}
         </div>
+
     );
 }
 
