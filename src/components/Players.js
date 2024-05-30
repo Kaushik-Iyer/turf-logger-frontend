@@ -7,7 +7,7 @@ function PlayersPage() {
     const token=localStorage.getItem('access_token');
 
     useEffect(() => {
-            fetch('https://turf-logger-backend.onrender.com/players',{
+            fetch('https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/players',{
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
@@ -17,7 +17,7 @@ function PlayersPage() {
             .then(response => response.json())
             .then(data => setPlayers(data));
 
-            fetch('https://turf-logger-backend.onrender.com/visualize',{
+            fetch('https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/visualize',{
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',

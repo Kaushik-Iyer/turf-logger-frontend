@@ -9,7 +9,7 @@ function Footer() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch('https://turf-logger-backend.onrender.com/suggestions', {
+        fetch('https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/suggestions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ function Footer() {
             navigator.geolocation.getCurrentPosition((position) => {
                 console.log('Latitude: ' + position.coords.latitude);
                 console.log('Longitude: ' + position.coords.longitude);
-                fetch (`https://turf-logger-backend.onrender.com/turf_near_me?lat=${position.coords.latitude}&lon=${position.coords.longitude}`, {
+                fetch (`https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/turf_near_me?lat=${position.coords.latitude}&lon=${position.coords.longitude}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

@@ -5,7 +5,7 @@ function LiveScores() {
     const [scores, setScores] = useState(null);
 
     useEffect(() => {
-        fetch('https://turf-logger-backend.onrender.com/live_scores', {
+        fetch('https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/live_scores', {
             credentials: 'include'
         })
         .then(response => response.json())

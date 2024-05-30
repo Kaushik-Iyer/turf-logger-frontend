@@ -5,7 +5,7 @@ import image from '../assets/61368356_836317416752486_6159324204471681024_n.jpg'
 function Login({ setRedirectTo }) {
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
-      fetch('https://turf-logger-backend.onrender.com/auth/google', {
+      fetch('https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/auth/google', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

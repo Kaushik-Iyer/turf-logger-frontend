@@ -31,7 +31,7 @@ function CreateEntry() {
             return;
         }
 
-        fetch('https://turf-logger-backend.onrender.com/entries', {
+        fetch('https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/entries', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ function CreateEntry() {
                 const month = date.getMonth() + 1; // Months are zero-based
                 const { goals, assists } = player;
 
-                return fetch(`https://turf-logger-backend.onrender.com/players/${day}/${month}/${goals}/${assists}`, {
+                return fetch(`https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/players/${day}/${month}/${goals}/${assists}`, {
                     credentials: 'include'
                 });
             })

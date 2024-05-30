@@ -5,7 +5,7 @@ function LogoutPage() {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        fetch('https://turf-logger-backend.onrender.com/logout', {
+        fetch('https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/logout', {
             method: 'GET',
             credentials: 'include',
             redirect: 'follow'
