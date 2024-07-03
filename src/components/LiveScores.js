@@ -3,14 +3,45 @@ import React, { useEffect, useState } from 'react';
 
 function LiveScores() {
     const [scores, setScores] = useState(null);
+    const [ws, setWs] = useState(null);
+
+    // useEffect(() => {
+    //     fetch(`${process.env.REACT_APP_SERVER_URL}/live_scores`, {
+    //         credentials: 'include'
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => setScores(data));
+    // }, []);
+    //
+    // if (scores === null) {
+    //     return 'Loading live scores...';
+    // }
 
     useEffect(() => {
-        fetch('https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/live_scores', {
-            credentials: 'include'
-        })
-        .then(response => response.json())
-        .then(data => setScores(data));
-    }, []);
+        const websocket = new WebSocket(`${process.env.REACT_APP_SERVER_URL.replace('http', 'ws')}/live_scores`);
+
+        websocket.onopen = () => {
+            console.log('WebSocket is open now.');
+        };
+
+        websocket.onmessage = (event) => {
+            setScores(JSON.parse(event.data));
+        }
+
+        websocket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        }
+
+        websocket.onclose = () => {
+            console.log('WebSocket is closed.');
+        }
+
+        setWs(websocket);
+
+        return () => {
+            websocket.close();
+        }
+    },[]);
 
     if (scores === null) {
         return 'Loading live scores...';
@@ -18,12 +49,13 @@ function LiveScores() {
 
     return (
         <div>
-            <h2>Live Scores</h2>
+            <h2 className="text-3xl font-bold mb-5">Live Scores</h2>
             {scores.map((match, index) => (
                 <div key={index} style={{border: '1px solid #ccc', padding: '10px', margin: '10px'}}>
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
                         <div>
-                            <img src={match.homeCrest} alt={`${match.homeTeam} crest`} style={{width: '50px'}} />
+                            <img src={match.homeCrest} alt={`${match.homeTeam} crest`} style={{width: '50px'}}
+                            />
                             <h3>{match.homeTeam}</h3>
                         </div>
                         <div>

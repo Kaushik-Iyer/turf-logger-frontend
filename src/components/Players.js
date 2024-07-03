@@ -1,13 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import LiveScores from './LiveScores';
+import styles from './Players.module.css';
+import EntryChart from "./EntryChart";
+import 'chartjs-adapter-moment';
+import {Chart, LinearScale, PointElement, Tooltip, Legend, TimeScale} from "chart.js";
+
+Chart.register(LinearScale, PointElement, Tooltip, Legend, TimeScale);
 
 function PlayersPage() {
+
     const [players, setPlayers] = useState(null);
-    const [chartData, setChartData] = useState(null);
     const token=localStorage.getItem('access_token');
 
+
+    const deleteEntry = (id) => {
+        fetch(`${process.env.REACT_APP_SERVER_URL}/entries/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+            },
+            credentials: 'include'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Player was deleted:', data);
+            const updatedPlayers = players.filter(player => player._id !== id);
+            setPlayers(updatedPlayers);
+        })
+        .catch(error => {
+            console.error('Error deleting player:', error);
+        });
+
+    }
+
     useEffect(() => {
-            fetch('https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/players',{
+            fetch(`${process.env.REACT_APP_SERVER_URL}/players`,{
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
@@ -17,52 +50,50 @@ function PlayersPage() {
             .then(response => response.json())
             .then(data => setPlayers(data));
 
-            fetch('https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/visualize',{
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token,
-                }
-            })
-            .then(response => response.text())
-            .then(data => setChartData(data));
         },[]);
     if (players === null) {
         return 'Loading...';
     }
-    return (  //add chart download link
-        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', fontFamily: 'Arial, sans-serif'}}>
-            <div style={{display: 'flex', justifyContent: 'space-around', width: '100%'}}>
-                <LiveScores />
+    return (
+        <div className={styles.container}>
+
+
+          <EntryChart />
+            <div className="flex flex-col md:flex-row gap-5">
                 <div>
-                    <div dangerouslySetInnerHTML={{__html: chartData}}></div>
-                    <h1 style={{marginBottom: '20px'}}>Your previous entries</h1>
-                    <table style={{width: '80%', borderCollapse: 'collapse', textAlign: 'center', margin: 'auto', backgroundColor: '#fff', boxShadow: '0px 0px 10px rgba(0,0,0,0.1)'}}>
-                        <thead>
-                            <tr style={{backgroundColor: '#007BFF', color: '#fff'}}>
-                                <th style={{padding: '10px'}}>Goals</th>
-                                <th style={{padding: '10px'}}>Assists</th>
-                                <th style={{padding: '10px'}}>Created At</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {players.map((player, index) => {
-                                const date = new Date(player.created_at);
-                                const formattedDate = `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`;
-                                return (
-                                    <tr key={player._id} style={{backgroundColor: index % 2 === 0 ? '#f2f2f2' : '#fff'}}>
-                                        <td style={{padding: '10px'}}>{player.goals}</td>
-                                        <td style={{padding: '10px'}}>{player.assists}</td>
-                                        <td style={{padding: '10px'}}>{formattedDate}</td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
+          <h1 className="text-3xl font-bold m-0">Your previous entries</h1>
+          <table className={styles.table}>
+            <thead>
+              <tr className={styles.tableHeader}>
+                <th className={styles.tableCell}>Goals</th>
+                <th className={styles.tableCell}>Assists</th>
+                <th className={styles.tableCell}>Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {players.map((player, index) => {
+                const date = new Date(player.created_at);
+                const formattedDate = `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`;
+                return (
+                  <tr key={player._id} style={{backgroundColor: index % 2 === 0 ? '#f2f2f2' : '#fff'}}>
+                    <td className={styles.tableCell}>{player.goals}</td>
+                    <td className={styles.tableCell}>{player.assists}</td>
+                    <td className={styles.tableCell}>{formattedDate}</td>
+                    <td className={styles.tableCell}>
+                      <button onClick={() => deleteEntry(player._id)}
+                      className= "text-red-600 font-bold py-2 px-4 rounded"
+                      >Delete</button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
                 </div>
-            </div>
+          <LiveScores />
         </div>
-    );
+      </div>
+      );
 }
 
 export default PlayersPage;

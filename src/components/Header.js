@@ -1,37 +1,26 @@
 import React from 'react';
-import CreateEntry from './CreateEntry';
 import { googleLogout } from '@react-oauth/google';
+import { useLocation } from 'react-router-dom';
 
 function LogoutPage() {
+    const location = useLocation();
     const handleLogout = () => {
-        // Remove user's data from session storage
         googleLogout();
         localStorage.removeItem('access_token');
 
-        // Redirect to the login page
         window.location = '/';
     };
 
+
     return (
-        <header>
-            <button 
-                style={{
-                    position: 'absolute', 
-                    top: '10px', 
-                    right: '10px',
-                    padding: '10px 20px',
-                    fontSize: '1em',
-                    borderRadius: '5px',
-                    border: 'none',
-                    color: '#fff',
-                    backgroundColor: '#007BFF',
-                    cursor: 'pointer'
-                }} 
+        <header className='mb-4'>
+
+            <button
+                className="absolute top-2 right-2 bg-blue-500 text-base border-none cursor-pointer px-8 py-4 rounded-lg text-white"
                 onClick={handleLogout}
             >
                 Logout
             </button>
-            <CreateEntry /> {}
         </header>
     );
 }

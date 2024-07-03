@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Modal from 'react-modal';
 import FootballPitch from './FootballPitch';
 import '../assets/css/CreateEntry.css'
 
@@ -7,6 +8,7 @@ function CreateEntry() {
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState(''); // Add this line
     const [response, setResponse] = useState(null);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
     const token=localStorage.getItem('access_token');
 
 
@@ -31,7 +33,7 @@ function CreateEntry() {
             return;
         }
 
-        fetch('https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/entries', {
+        fetch(`${process.env.REACT_APP_SERVER_URL}/entries`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -54,7 +56,7 @@ function CreateEntry() {
                 const month = date.getMonth() + 1; // Months are zero-based
                 const { goals, assists } = player;
 
-                return fetch(`https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/players/${day}/${month}/${goals}/${assists}`, {
+                return fetch(`${process.env.REACT_APP_SERVER_URL}/players/${day}/${month}/${goals}/${assists}`, {
                     credentials: 'include'
                 });
             })
@@ -75,51 +77,84 @@ function CreateEntry() {
     };
 
     return (
-        <div className="create-entry-container">
-        <h3>Create Entry </h3>
-        <p className="note">Please note: You can only add one entry per day. If you add more than one, the latest entry will replace the previous one for that day.</p>
-        <form onSubmit={handleSubmit}>
-            <fieldset>
-            <label htmlFor="position">Position:</label>
-            <select
-                id="position"
-                name="position"
-                value={player.position}
-                onChange={handleChange}
-            >
-                <option value="Goalkeeper">Goalkeeper</option>
-                <option value="Defender">Defender</option>
-                <option value="Midfielder">Midfielder</option>
-                <option value="Forward">Forward</option>
-            </select>
+        <div className="create-entry-container mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col max-w-lg">
+            <h3>Create Entry </h3>
+            <p className="note">Please note: You can only add one entry per day. If you add more than one, the latest
+                entry will replace the previous one for that day.</p>
+            <form onSubmit={handleSubmit}>
+                <fieldset>
+                    <label htmlFor="position">Position:</label>
+                    <select
+                        id="position"
+                        name="position"
+                        value={player.position}
+                        onChange={handleChange}
+                    >
+                        <option value="Goalkeeper">Goalkeeper</option>
+                        <option value="Defender">Defender</option>
+                        <option value="Midfielder">Midfielder</option>
+                        <option value="Forward">Forward</option>
+                    </select>
 
-            <label htmlFor="goals">Goals:</label>
-            <input
-                type="number"
-                id="goals"
-                name="goals"
-                value={player.goals}
-                onChange={handleChange}
-            />
+                    <label htmlFor="goals">Goals:</label>
+                    <input
+                        type="number"
+                        id="goals"
+                        name="goals"
+                        value={player.goals}
+                        onChange={handleChange}
+                    />
 
-            <label htmlFor="assists">Assists:</label>
-            <input
-                type="number"
-                id="assists"
-                name="assists"
-                value={player.assists}
-                onChange={handleChange}
-            />
-            </fieldset>
-            {error && <p className="error-message">{error}</p>}
-            <button type="submit">Create Entry</button>
-        </form>
-        {successMessage && <p className="success-message">{successMessage}</p>}
-        {/* {response && (
+                    <label htmlFor="assists">Assists:</label>
+                    <input
+                        type="number"
+                        id="assists"
+                        name="assists"
+                        value={player.assists}
+                        onChange={handleChange}
+                    />
+                </fieldset>
+                {error && <p className="error-message">{error}</p>}
+                <div className="flex justify-between">
+                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Create Entry</button>
+                    {/*<button*/}
+                    {/*    type="button"*/}
+                    {/*    style={{*/}
+                    {/*        background: 'none',*/}
+                    {/*        border: 'none',*/}
+                    {/*        color: 'blue',*/}
+                    {/*        textDecoration: 'underline',*/}
+                    {/*        cursor: 'pointer'*/}
+                    {/*    }}*/}
+                    {/*    onClick={() => setModalIsOpen(true)}*/}
+                    {/*>*/}
+                    {/*    Draw Pass and Shot Progression*/}
+                    {/*</button>*/}
+                </div>
+            </form>
+            {successMessage && <p className="success-message">{successMessage}</p>}
+            {/* {response && (
             <p>
             On this day, {response.player} also scored the same goals and assists in the match between {response.home_team} and {response.away_team} ({response.date}).
             </p>
         )} */}
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                contentLabel="Pass and Shot Progression"
+                style={{
+                    content: {
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '50%',
+                        height: '50%'
+                    }
+                }}
+            >
+                <FootballPitch/>
+                <button onClick={() => setModalIsOpen(false)}>Close</button>
+            </Modal>
         </div>
 
     );

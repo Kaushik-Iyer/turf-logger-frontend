@@ -1,11 +1,13 @@
 import React from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
 import image from '../assets/61368356_836317416752486_6159324204471681024_n.jpg';
+import  {useNavigate} from "react-router-dom";
 
-function Login({ setRedirectTo }) {
+function Login() {
+    const navigate = useNavigate();
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
-      fetch('https://turf-logger-backend-4ea39f4ebb11.herokuapp.com/auth/google', {
+      fetch(`${process.env.REACT_APP_SERVER_URL}/auth/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -16,7 +18,7 @@ function Login({ setRedirectTo }) {
         .then((data) => {
           if (data.access_token) {
             localStorage.setItem('access_token', data.access_token);
-            setRedirectTo('/players');
+            navigate('/profile')
           }
         })
         .catch((error) => console.error('Failed to fetch user:', error));
@@ -25,96 +27,44 @@ function Login({ setRedirectTo }) {
   });
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        backgroundColor: '#f5f5f5',
-        backgroundImage: `url(${image})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-    <h1 style={{ 
-        fontSize: '2.5rem', 
-        color: '#fff', // Changed to white
-        marginBottom: '2rem', 
-        fontFamily: "'Helvetica Neue', Arial, sans-serif", 
-        fontWeight: 'bold', 
-        textShadow: '1px 1px 2px #aaa' 
-    }}>
-        Turf Stats Logger
-    </h1>
-      <button
-        onClick={login}
-        style={{
-          padding: '1rem 2rem',
-          fontSize: '1rem',
-          color: '#000', // Changed to black
-          backgroundColor: '#fff', // Changed to white
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-        }}
+      <div
+            className="flex flex-col justify-center items-center h-screen bg-cover bg-center"
+            style={{backgroundImage: `url(${image})`}}
       >
-        Sign in with Google 
-      </button>
-      <p style={{ 
-          marginTop: '1rem', 
-          fontSize: '0.9rem', 
-          color: '#fff' // Changed to white
-      }}>
-        Note: It might take up to 30 seconds to log in.
-      </p>
-      <div style={{ 
-    marginBottom: '1rem', 
-    display: 'flex', 
-    flexDirection: 'column', 
-    alignItems: 'center', 
-    marginTop: '2rem' 
-}}>
-    <h4 style={{ 
-        marginBottom: '0.5rem', 
-        fontSize: '1.5rem', 
-        fontWeight: 'bold', 
-        fontFamily: "'Helvetica Neue', Arial, sans-serif", 
-        color: '#fff' // Changed to white
-    }}>
-        Kaushik Iyer
-    </h4>
-    <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        gap: '1rem' 
-    }}>
-        <a style={{ 
-            color: '#fff', // Changed to white
-            textDecoration: 'underline', 
-            fontSize: '1.2rem' 
-        }} href="https://www.linkedin.com/in/kaushik-iyer-8aa347216/" target="_blank" rel="noreferrer">
-            LinkedIn
-        </a>
-        <a style={{ 
-            color: '#fff', // Changed to white
-            textDecoration: 'underline', 
-            fontSize: '1.2rem' 
-        }} href="https://github.com/Kaushik-Iyer" target="_blank" rel="noreferrer">
-            GitHub
-        </a>
-        <a style={{ 
-            color: '#fff', // Changed to white
-            textDecoration: 'underline', 
-            fontSize: '1.2rem' 
-        }} href="https://www.instagram.com/iyerkaushik/" target="_blank" rel="noreferrer">
-            Instagram
-        </a>
-    </div>
-</div>
-    </div>
-    
+          <h1
+              style={{textShadow: '1px 1px 2px #aaa'}}
+              className="text-white mb-8 font-bold leading-none font-sans text-4xl"
+          >
+              Turf Stats Logger
+          </h1>
+          <button
+              onClick={login}
+              // convert to tailwind
+              className="bg-white text-black px-8 py-4 rounded-lg"
+          >
+              Sign in with Google
+          </button>
+          <p className="text-white text-sm"> Note: It might take up to 30 seconds to log in.</p>
+          <h4 className="text-xl font-bold text-white">Kaushik Iyer</h4>
+
+          <div className="flex flex-col items-center mt-8 space-y-4">
+              <div className="flex justify-center gap-4 mt-2">
+                  <a className="text-white text-lg underline hover:text-gray-300"
+                     href="https://www.linkedin.com/in/kaushik-iyer-8aa347216/" target="_blank" rel="noreferrer">
+                      LinkedIn
+                  </a>
+                  <a className="text-white text-lg underline hover:text-gray-300" href="https://github.com/Kaushik-Iyer"
+                     target="_blank" rel="noreferrer">
+                      GitHub
+                  </a>
+                  <a className="text-white text-lg underline hover:text-gray-300"
+                     href="https://www.instagram.com/iyerkaushik/" target="_blank" rel="noreferrer">
+                      Instagram
+                  </a>
+              </div>
+          </div>
+      </div>
+
   );
 }
 
