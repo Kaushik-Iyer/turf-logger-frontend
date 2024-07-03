@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  .innerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .table, .chart {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  
+  .table {
+    text-align: center;
+    margin: auto;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  }
+  
+  .tableHeader {
+    background-color: #007BFF;
+    color: #fff;
+  }
+  .chart img {
+    width: 100%;
+    height: auto;
+  }
+  .tableCell {
+    padding: 10px;
+  }
+  
+
+
+  
