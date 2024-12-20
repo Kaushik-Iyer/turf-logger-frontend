@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import FootballPitch from './FootballPitch';
 import '../assets/css/CreateEntry.css'
 
 function CreateEntry() {
@@ -9,7 +8,7 @@ function CreateEntry() {
     const [successMessage, setSuccessMessage] = useState(''); // Add this line
     const [response, setResponse] = useState(null);
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const token=localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token');
 
 
     const handleChange = (event) => {
@@ -117,19 +116,6 @@ function CreateEntry() {
                 {error && <p className="error-message">{error}</p>}
                 <div className="flex justify-between">
                     <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Create Entry</button>
-                    {/*<button*/}
-                    {/*    type="button"*/}
-                    {/*    style={{*/}
-                    {/*        background: 'none',*/}
-                    {/*        border: 'none',*/}
-                    {/*        color: 'blue',*/}
-                    {/*        textDecoration: 'underline',*/}
-                    {/*        cursor: 'pointer'*/}
-                    {/*    }}*/}
-                    {/*    onClick={() => setModalIsOpen(true)}*/}
-                    {/*>*/}
-                    {/*    Draw Pass and Shot Progression*/}
-                    {/*</button>*/}
                 </div>
             </form>
             {successMessage && <p className="success-message">{successMessage}</p>}
@@ -152,7 +138,6 @@ function CreateEntry() {
                     }
                 }}
             >
-                <FootballPitch/>
                 <button onClick={() => setModalIsOpen(false)}>Close</button>
             </Modal>
         </div>
