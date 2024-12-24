@@ -5,18 +5,6 @@ function LiveScores() {
     const [scores, setScores] = useState(null);
     const [ws, setWs] = useState(null);
 
-    // useEffect(() => {
-    //     fetch(`${process.env.REACT_APP_SERVER_URL}/live_scores`, {
-    //         credentials: 'include'
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => setScores(data));
-    // }, []);
-    //
-    // if (scores === null) {
-    //     return 'Loading live scores...';
-    // }
-
     useEffect(() => {
         const websocket = new WebSocket(`${process.env.REACT_APP_SERVER_URL.replace('http', 'ws')}/live_scores`);
 
@@ -41,7 +29,7 @@ function LiveScores() {
         return () => {
             websocket.close();
         }
-    },[]);
+    }, []);
 
     if (scores === null) {
         return 'Loading live scores...';
@@ -51,15 +39,15 @@ function LiveScores() {
         <div>
             <h2 className="text-3xl font-bold mb-5">Live Scores</h2>
             {scores.map((match, index) => (
-                <div key={index} style={{border: '1px solid #ccc', padding: '10px', margin: '10px'}}>
-                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <div key={index} style={{ border: '1px solid #ccc', padding: '10px', margin: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <div>
-                            <img src={match.homeCrest} alt={`${match.homeTeam} crest`} style={{width: '50px'}}
+                            <img src={match.homeCrest} alt={`${match.homeTeam} crest`} style={{ width: '50px' }}
                             />
                             <h3>{match.homeTeam}</h3>
                         </div>
                         <div>
-                            <img src={match.awayCrest} alt={`${match.awayTeam} crest`} style={{width: '50px'}} />
+                            <img src={match.awayCrest} alt={`${match.awayTeam} crest`} style={{ width: '50px' }} />
                             <h3>{match.awayTeam}</h3>
                         </div>
                     </div>
