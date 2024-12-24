@@ -9,6 +9,11 @@ import Friends from "./Friends";
 function Profile() {
     const [user, setUser] = useState(null);
     const token = localStorage.getItem('access_token');
+    const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+    const handleEntryCreated = () => {
+        setRefreshTrigger(prev => prev + 1);
+    };
 
     const fetchUser = async () => {
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/profile`, {
@@ -34,7 +39,7 @@ function Profile() {
     return (
         <div className="flex flex-col sm:flex-row justify-center space-x-16">
             <div>
-                <CreateEntry />
+                <CreateEntry onEntryCreated={handleEntryCreated} />
             </div>
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
                 <div className="mb-6">
@@ -51,7 +56,7 @@ function Profile() {
                 <Injuries token={token} />
                 <Friends token={token} />
             </div>
-            <Players />
+            <Players key={refreshTrigger} />
         </div>
     );
 }

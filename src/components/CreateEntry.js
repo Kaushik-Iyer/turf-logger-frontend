@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-modal';
 import '../assets/css/CreateEntry.css'
 
-function CreateEntry() {
+function CreateEntry({ onEntryCreated }) {
     const [player, setPlayer] = useState({ position: '', goals: 0, assists: 0 });
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState(''); // Add this line
@@ -27,10 +27,7 @@ function CreateEntry() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
-        if (error) {
-            return;
-        }
+        if (error) return;
 
         fetch(`${process.env.REACT_APP_SERVER_URL}/entries`, {
             method: 'POST',
@@ -42,33 +39,13 @@ function CreateEntry() {
             body: JSON.stringify(player)
         })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 return response.json();
             })
             .then(data => {
                 console.log('Player was created:', data);
-                setSuccessMessage('Player was created successfully'); // Add this line
-                const date = new Date();
-                const day = date.getDate();
-                const month = date.getMonth() + 1; // Months are zero-based
-                const { goals, assists } = player;
-
-                return fetch(`${process.env.REACT_APP_SERVER_URL}/players/${day}/${month}/${goals}/${assists}`, {
-                    credentials: 'include'
-                });
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                setResponse(data);
-                // Render the response here
-
+                setSuccessMessage('Player was created successfully');
+                if (onEntryCreated) onEntryCreated();
             })
             .catch(error => {
                 console.error('Error:', error);

@@ -56,7 +56,6 @@ function Login() {
         >
           Sign in with Google
         </button>
-        <h4 className="text-xl font-bold text-white">Kaushik Iyer</h4>
 
         <div className="flex flex-col items-center mt-8 space-y-4">
           <div className="flex justify-center gap-4 mt-2">
@@ -75,14 +74,6 @@ function Login() {
               rel="noreferrer"
             >
               GitHub
-            </a>
-            <a
-              className="text-white text-lg underline hover:text-gray-300"
-              href="https://www.instagram.com/iyerkaushik/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Instagram
             </a>
           </div>
         </div>
